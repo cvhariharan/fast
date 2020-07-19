@@ -74,6 +74,9 @@ func main() {
 		log.Fatal("Cannot create temporary file", err)
 	}
 
+	defer p.Close()
+	defer os.Remove(tmpFile.Name())
+
 	wg.Add(1)
 	go func(p *ProgressCounter) {
 		for !p.Closed {
@@ -89,8 +92,6 @@ func main() {
 		tmpFile.Close()
 		log.Println(err)
 	}
-	os.Remove(TmpFile)
-	p.Close()
 
 	wg.Wait()
 }
