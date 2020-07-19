@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"io"
+	"io/ioutil"
 	"log"
 	"os"
 	"strings"
@@ -16,7 +17,7 @@ import (
 
 const (
 	TmpFile = ".test"
-	FileURL = "https://res.cloudinary.com/cvhariharan/image/fetch/https://eoimages.gsfc.nasa.gov/images/imagerecords/57000/57723/globe_west_2048.tif"
+	FileURL = "https://rawcdn.githack.com/cvhariharan/fast/d0df10713b43baf8c62297d07a4c70841a0c9334/assets/globe.tif"
 
 	// SleepTime in milliseconds
 	SleepTime = 1000
@@ -68,9 +69,9 @@ func main() {
 	}
 
 	p := NewProgressCounter()
-	out, err := os.Create(TmpFile)
+	tmpFile, err := ioutil.TempFile(os.TempDir(), "fast-")
 	if err != nil {
-		log.Println(err)
+		log.Fatal("Cannot create temporary file", err)
 	}
 
 	wg.Add(1)
@@ -84,8 +85,8 @@ func main() {
 		wg.Done()
 	}(p)
 
-	if _, err = io.Copy(out, io.TeeReader(resp.Body, p)); err != nil {
-		out.Close()
+	if _, err = io.Copy(tmpFile, io.TeeReader(resp.Body, p)); err != nil {
+		tmpFile.Close()
 		log.Println(err)
 	}
 	os.Remove(TmpFile)
