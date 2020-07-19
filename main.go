@@ -16,7 +16,7 @@ import (
 
 const (
 	TmpFile = ".test"
-	FileURL = "http://212.183.159.230/5MB.zip"
+	FileURL = "https://res.cloudinary.com/cvhariharan/image/fetch/https://eoimages.gsfc.nasa.gov/images/imagerecords/57000/57723/globe_west_2048.tif"
 
 	// SleepTime in milliseconds
 	SleepTime = 1000
