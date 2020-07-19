@@ -17,6 +17,9 @@ import (
 const (
 	TmpFile = ".test"
 	FileURL = "http://212.183.159.230/5MB.zip"
+
+	// SleepTime in milliseconds
+	SleepTime = 1000
 )
 
 type ProgressCounter struct {
@@ -72,15 +75,9 @@ func main() {
 
 	wg.Add(1)
 	go func(p *ProgressCounter) {
-		var values []float64
 		for !p.Closed {
 			p.Progress()
-			values = append(values, p.CurrentSpeed)
-			time.Sleep(1000 * time.Millisecond)
-		}
-		var sum float64
-		for _, v := range values {
-			sum += v
+			time.Sleep(SleepTime * time.Millisecond)
 		}
 		fmt.Printf("\nAverage speed: %s/s\n", humanize.Bytes(uint64(p.Total/int64(time.Since(p.InitTime).Seconds()))))
 		fmt.Printf("Started %s\n", humanize.Time(p.InitTime))
