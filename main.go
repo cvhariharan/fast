@@ -74,7 +74,6 @@ func main() {
 		log.Fatal("Cannot create temporary file", err)
 	}
 
-	defer p.Close()
 	defer os.Remove(tmpFile.Name())
 
 	wg.Add(1)
@@ -92,6 +91,7 @@ func main() {
 		tmpFile.Close()
 		log.Println(err)
 	}
+	p.Close()
 
 	wg.Wait()
 }
